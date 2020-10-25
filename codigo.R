@@ -12,3 +12,6 @@ print(string3)
 
 string4 = "Prueba 3"
 print(string4)
+
+string5 <-"Prueba 4"
+print(string5)
