@@ -9,3 +9,7 @@ print(string2)
 
 string3 = 'prueba2'
 print(string3)
+
+a <- 0
+b <- 1
+a + b
