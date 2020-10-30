@@ -23,3 +23,30 @@ mat<-cbind(vec2,vec2,vec3,vec4)
 mat
 colnames(mat)<-c("yt","x1t","x2t","x3t")
 View(mat)
+runif(1)
+# lÍNEAS 38-48
+Ts<-c(rep(0,n))
+randox<-function(vecrs){
+  u<-runif(1)
+  i<-1
+  s<-vecrs[i]
+  while ((u>s)& (i<length(p))){
+    i<-i+1
+    s<-s+p(i)
+  }
+  return(i)
+}
+while(Ts<20){
+  Ts[i+1]<- Ts[i] -log(runif(1))/lambda[x[i]] #generando una v.a. exponencial para el tiempo de saltos
+  x[i+1]<-randox(Q[x(i),])
+  if (x(i)==1){
+    print("disease died out")
+    break
+  }
+  else{
+    i<-i+1
+  }
+  
+  
+  }
+
