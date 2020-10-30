@@ -37,10 +37,10 @@ Q <-matrix(rep(0, len = (N+1)*(N+1)), nrow = N+1)
 
 lambda <- rep(0,N+1)
 
-for (i in 2:N){
-  qi = (gamma*(i-1) + (beta/N) * (i-1)* (N-(i-1)))
-  Q[i,i-1] <- gamma * (i-1)/qi
-  Q[i,i+1] <- (beta/N)*(i-1)*(N-(i-1))/qi
-  lambda[i]<-qi
+for (k in 2:N){
+  qk = (gamma*(k-1) + (beta/N) * (k-1)* (N-(k-1)))
+  Q[k,k-1] <- gamma * (k-1)/qk
+  Q[k,k+1] <- (beta/N)*(k-1)*(N-(k-1))/qk
+  lambda[k]<-qk
 }
 
