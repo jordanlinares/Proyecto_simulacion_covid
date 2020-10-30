@@ -32,7 +32,7 @@ randox<-function(vecrs){
   s<-vecrs[i]
   while ((u>s)& (i<length(p))){
     i<-i+1
-    s<-s+p(i)
+    s<-s+p[i]
   }
   return(i)
 }
