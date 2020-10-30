@@ -42,6 +42,7 @@ for (k in 2:N){
   lambda[k]<-qk
 }
 
+# Aquí deben ir las líneas 24 a 35
 
 
 
