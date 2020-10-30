@@ -26,3 +26,21 @@ rando <- function(p){
   }
   i
 }
+
+#Genera matriz Q
+beta <- 2
+gamma <- 1
+N <-1000
+I0 <-100
+S <-(c(1:(N+2)-1))
+Q <-matrix(rep(0, len = (N+1)*(N+1)), nrow = N+1)
+
+lambda <- rep(0,N+1)
+
+for (i in 2:N){
+  qi = (gamma*(i-1) + (beta/N) * (i-1)* (N-(i-1)))
+  Q[i,i-1] <- gamma * (i-1)/qi
+  Q[i,i+1] <- (beta/N)*(i-1)*(N-(i-1))/qi
+  lambda[i]<-qi
+}
+
