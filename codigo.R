@@ -56,4 +56,15 @@ while (Ts[i] < 20) {
 }
 
 # Plotting
+S[x] <- S[x] / N
+i <- length(Ts)-1
+t <- seq(1,Ts[i],by=.01)
+y <-  ((beta - 1)*(I0/N)*exp((beta-1)*t))/((beta - 1) - beta *(I0/N)*(1-exp((beta - 1)*t)))
+
+plot(Ts, S[x], type = 'l', main = 'Movimiento Browniano geométrico', 
+     xlab = 'Time', ylab = 'Número de personas infectadas', col = 'red')
+lines(t, y, col = 'blue')
+
+
+
 
