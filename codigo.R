@@ -3,7 +3,7 @@ library(tidyverse)
 
 rando <- function(p){
   #Genera una variable aleatoria en 1,2,...,n dado un vector de distribución
-  u <- rand(1)
+  u <- runif(1)
   i <- 1
   s <- p[1]
   while ((u>s) && (i<length(p))){
@@ -44,7 +44,7 @@ x[1]   <- rando(mu)
 i      <- 1
 
 # Simulación
-while (T(i) < 20) {
+while (Ts[i] < 20) {
   Ts[i+1] <- Ts[i] - (log(runif(1))/lambda[x[i]]) #generando una v.a. exponencial para el tiempo de saltos
   x[i+1]  <- rando(Q[x[i],]) # use Q to make state transitions
   if (x[i+1] == 1) {
