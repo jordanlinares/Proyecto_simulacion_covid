@@ -5,7 +5,7 @@ library(reasx1)
 datos_Iniciales       <- read_excel("datos_Iniciales.xlsx")
 parametros_simulacion <- read_excel("parametros_simulacion.xlsx")
 
-# Creamos la matriz de Markov de acuerdo la base teórica
+# Creamos la matriz de Markov de acuerdo con la base teórica
 S <- c(1-((is/Sigma)*(betaA*(ia/n)+betaY*(iy/n)))-(lambda0*is)/Sigma, 
        (is/Sigma)*(betaA*(ia/n)+(betaY*(iy/n))),
        0,
