@@ -2,7 +2,7 @@
 library(reasx1)
 
 # Importamos bases de datos
-datos_Iniciales       <- read_excel("datos_Iniciales.xlsx")
+datos_Iniciales       <- read_excel("datos_Iniciales1.xlsx")
 parametros_simulacion <- read_excel("parametros_simulacion.xlsx")
 
 # Creamos la matriz de Markov de acuerdo con la base teórica
