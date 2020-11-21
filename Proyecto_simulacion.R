@@ -1,9 +1,9 @@
 # Importamos librerías necesarias
-library(reasx1)
-
+library(readxl)
+library(tidyverse)
 # Importamos bases de datos
 datos_Iniciales       <- read_excel("datos_Iniciales1.xlsx")
-parametros_simulacion <- read_excel("parametros_simulacion.xlsx")
+parametros_simulacion <- read_csv("parametros_simulacion.csv")
 
 # Creamos la matriz de Markov de acuerdo con la base teórica
 S <- c(1-((is/Sigma)*(betaA*(ia/n)+betaY*(iy/n)))-(lambda0*is)/Sigma, 
