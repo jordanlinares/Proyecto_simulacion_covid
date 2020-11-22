@@ -114,15 +114,30 @@ View(m1)
 sa<-runif(100)
 View(s)
 sa
-vecpos<-c(rep(1,100))
+View(s)
+vecpos<-c(rep(1,101))
+p
+
+a=sum(p)
+a
+p<-sa[1]>s[vecpos[1],]
+p<-as.numeric(p)
+a<-sum(p)
+if(a==0){
+  pos=1
+}
+pos
 for (i in (2:101)){
   p<-sa[i]>s[vecpos[i-1],]
   p<-as.numeric(p)
-  pos<-(sum(p)+1)
+  a<-sum(p)+1
+  pos<-a
   vecpos[i]<-pos
 }
 vecpos
 
+s
+sa
 p<-sa[3]>s[vecpos[1],]
 p
 p<-as.numeric(p)
