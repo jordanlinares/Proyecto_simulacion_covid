@@ -1,7 +1,7 @@
 library(readxl)
 library(tidyverse)
 rm(list=ls())
-datos_Iniciales1 <- read_excel("datos_Iniciales1.xlsx")
+datos_Iniciales1      <- read_excel("datos_Iniciales1.xlsx")
 parametros_simulacion <- read_csv("parametros_simulacion.csv")
 
 M_aux <- matrix(NA,32,36)
@@ -101,13 +101,30 @@ m30 <- t(matrix(M_aux[30,],6,6))
 m31 <- t(matrix(M_aux[31,],6,6))
 m32 <- t(matrix(M_aux[32,],6,6))
 
-acum<-function (mat){
-  aux<-matrix(0, nrow=6, ncol=6)
+## Simulación -------------------------------------------------------------
+# Generamos la matriz de probabilidades acumuladas
+acum <-function (mat){
+  aux <-matrix(0, nrow=6, ncol=6)
   for(i in 1:6){
-    aux[i,]<-cumsum(mat[i,])
+    aux[i,] <- cumsum(mat[i,])
   }
   return(aux)
 }
-s<-acum(m1)
-View(s)
-View(m1)
+
+s <-acum(m1)
+
+# Definimos parámetros
+p <- 500
+alpha <- rep(1/100,100) # Vector de probabilidades iniciales 
+estados <- 1:100 # Espacio de estados
+n <- 1000 # Número de simulaciones
+
+for (i in 2:p) { 
+  j = 1;
+  while(U[i] > func.act[X[i - 1], j]) 
+    j = j + 1;
+    X[i] <- estados[j] 
+    if (X[i] == 100) {
+  break
+    }
+}
