@@ -102,8 +102,9 @@ m31 <- t(matrix(M_aux[31,],6,6))
 m32 <- t(matrix(M_aux[32,],6,6))
 
 ## Simulación -------------------------------------------------------------
-# Generamos la matriz de probabilidades acumuladas
+# Función que genera la matriz de probabilidades acumuladas
 acum <-function (mat){
+  # @mat: matriz de nxn Markoviana
   aux <-matrix(0, nrow=6, ncol=6)
   for(i in 1:6){
     aux[i,] <- cumsum(mat[i,])
@@ -111,20 +112,50 @@ acum <-function (mat){
   return(aux)
 }
 
-s <-acum(m1)
+## i ## Forma iterativa de obtener la matriz acumulada para cada estado
+mattot <-cbind(m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,
+              m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32) # Matriz de los 32 estados
 
-# Definimos parámetros
-p <- 500
-alpha <- rep(1/100,100) # Vector de probabilidades iniciales 
-estados <- 1:100 # Espacio de estados
-n <- 1000 # Número de simulaciones
+# Variable donde se define una sola matriz de tamaño 6x192 que contiene 
+# las 32 matrices acumuladas
+p <- rep(0,6)
 
-for (i in 2:p) { 
-  j = 1;
-  while(U[i] > func.act[X[i - 1], j]) 
-    j = j + 1;
-    X[i] <- estados[j] 
-    if (X[i] == 100) {
-  break
-    }
+# Proceso iterativo 
+for(i in 1:32){
+  m <- mattot[,((1+6*(i-1)):((i)*6))]
+  s <- acum(m)
+  p <- cbind(p,s)
 }
+p <- p[,-1] # Se reacomoda la matriz
+# Proceso terminado, p contiene las matrices acumuladas
+
+## ii ## Forma iterativa de pasar entre Estados
+matacumtot <- p
+vecpostot  <- rep(0,101) # Matriz con vectores de posiciones
+vecpos     <- rep(1,101) # Vector con posiciones de cada estado (individual)
+for(i in 1:32){ # Vamos a sacar 100 iteraciones en cada Estado
+  mataces <- matacumtot[,((1+6*(i-1)):((i)*6))] # matriz acumulada del Estado
+  sa      <- runif(100)
+  for (i in (2:101)){
+    p   <- sa[i]>mataces[vecpos[i-1],]
+    p   <- as.numeric(p)
+    a   <- sum(p)+1
+    pos <- a
+    vecpos[i] <- pos
+  }
+  vecpostot <- cbind(vecpostot,vecpos)
+}
+
+# Matriz acumulada de los vectores iniciales para comenzar la simulación 
+alphacum <- as.matrix(datos[1:6,])
+cumvert  <- function(mat){
+  m <- 
+  l <- length(mat)
+  for (i in 1:l){
+    aux <- mat[,i]
+    
+  }
+} 
+
+
+
