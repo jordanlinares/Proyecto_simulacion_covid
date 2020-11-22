@@ -111,3 +111,50 @@ acum<-function (mat){
 s<-acum(m1)
 View(s)
 View(m1)
+sa<-runif(100)
+View(s)
+sa
+vecpos<-c(rep(1,100))
+for (i in (2:101)){
+  p<-sa[i]>s[vecpos[i-1],]
+  p<-as.numeric(p)
+  pos<-(sum(p)+1)
+  vecpos[i]<-pos
+}
+vecpos
+
+p<-sa[3]>s[vecpos[1],]
+p
+p<-as.numeric(p)
+sum(p)
+m1
+datosiniciales2<-datos_Iniciales1
+dat<-datosiniciales2[-(7:9),]
+View(dat)
+dat<-as.matrix(dat)
+dat<-dat[,-1]
+dat
+view(dat)
+
+distin<-matrix(0, nrow=6, ncol=32)
+View(distin)
+dat<-as.matrix(dat)
+
+n[1]*dat[1,2]
+length(n)
+View(dat)
+View(n)
+datin<-matrix(0, nrow=6, ncol=32)
+View(datin)
+
+for (j in 1:32){
+  for (i in 1:6){
+    datin[i,j]<-n[j]*dat[i,j]
+  }
+}
+datin
+View(datin)
+colSums(datin)
+n
+
+colnames(datin)<-colnames(dat)
