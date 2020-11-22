@@ -101,3 +101,16 @@ m30 <- t(matrix(M_aux[30,],6,6))
 m31 <- t(matrix(M_aux[31,],6,6))
 m32 <- t(matrix(M_aux[32,],6,6))
 
+View(m2)
+?cumsum
+
+acum<-function (mat){
+  aux<-matrix(0, nrow=6, ncol=6)
+  for(i in 1:6){
+    aux[i,]<-cumsum(mat[i,])
+  }
+  return(aux)
+}
+s<-acum(m1)
+View(s)
+View(m1)
