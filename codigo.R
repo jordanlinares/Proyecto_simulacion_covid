@@ -47,7 +47,7 @@ rando <- function(p){
     i <- i+1
     s <- s+p[i]
   }
-  i
+  return(i)
 }
 
 #Genera matriz Q
