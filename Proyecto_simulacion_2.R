@@ -7,6 +7,14 @@ parametros_simulacion <- read_csv("parametros_simulacion.csv")
 M_aux <- matrix(NA,32,36)
 datos <- datos_Iniciales1[,2:33]
 
+# Modificamos el vector de Aguascalientes como prueba
+datos[4,1] <- 0.7 # S
+datos[2,1] <- 0.1 # E
+datos[1,1] <- 0.01# A
+datos[5,1] <- 0.02# Y
+datos[3,1] <- 0.15 # Q
+datos[6,1] <- 0.02 # R
+  
 #Parametros fijos
 Parametros <- parametros_simulacion$Valor
 sigma   <- Parametros[1]
@@ -33,7 +41,7 @@ n <- c(1434635,3634868,804708,1000617,5730367,3801487,9018645,3218720,785153,
 
 #Sigmas mayusculas por estado
 Sigma <- rep(NA,32)
-for(i in 1:32){
+for(i in 1:32){ 
   Sigma[i] <- (etta*as.numeric(datos[5,i])+kappa*as.numeric(datos[6,i]) +
                  lambda0*as.numeric(datos[1,i])+lambda1*as.numeric(datos[3,i])+
                  lambda2*as.numeric(datos[4,i])+gamma*as.numeric(datos[5,i])+
@@ -44,7 +52,7 @@ for(i in 1:32){
 }
 
 #Probabilidades de transición
-for (j in 1:32){
+for (j in 1:32){ 
   M_aux[j,] <- c((1-((as.numeric(datos[1,j])/Sigma[j])*(as.numeric(datos[8,j])*
                 (as.numeric(datos[3,j])/n[j])+as.numeric(datos[9,j])*
                 (as.numeric(datos[4,j])/n[j])))-(lambda0*as.numeric(datos[1,j]))/Sigma[j]),
@@ -166,7 +174,11 @@ for(i in 1:32){
   vecpostot <- cbind(vecpostot,vecpos)
 }
 
-
-
-
+# Extraemos sólo el vector de prueba (Aguascalientes)
+prueba <- vecpostot[,2]
+table(prueba) # Tabla de Frecuencias
+datos[1:6,1] # Probabilidades asignadas al principio
+alphacum[,1] # Vector de probabilidades acumuladas
+mattot[,((1+6*(1-1)):((1)*6))] # Matriz Markoviana
+matacumtot[,((1+6*(1-1)):((1)*6))] # Matriz de Probabilidades Acumuladas
 
