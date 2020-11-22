@@ -123,10 +123,6 @@ a
 p<-sa[1]>s[vecpos[1],]
 p<-as.numeric(p)
 a<-sum(p)
-if(a==0){
-  pos=1
-}
-pos
 for (i in (2:101)){
   p<-sa[i]>s[vecpos[i-1],]
   p<-as.numeric(p)
@@ -135,9 +131,11 @@ for (i in (2:101)){
   vecpos[i]<-pos
 }
 vecpos
-
+sa[5]>s[6,]
+s
 s
 sa
+View(m1)
 p<-sa[3]>s[vecpos[1],]
 p
 p<-as.numeric(p)
