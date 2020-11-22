@@ -102,8 +102,9 @@ m31 <- t(matrix(M_aux[31,],6,6))
 m32 <- t(matrix(M_aux[32,],6,6))
 
 ## Simulación -------------------------------------------------------------
-# Función que genera la matriz de probabilidades acumuladas
+# Funciones
 acum <-function (mat){
+  # Función que genera la matriz de probabilidades acumuladas
   # @mat: matriz de nxn Markoviana
   aux <-matrix(0, nrow=6, ncol=6)
   for(i in 1:6){
@@ -112,10 +113,23 @@ acum <-function (mat){
   return(aux)
 }
 
-## i ## Forma iterativa de obtener la matriz acumulada para cada estado
-mattot <-cbind(m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,
-              m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32) # Matriz de los 32 estados
+cmvert  <- function(mat){
+  # Función que genera una matriz de sumas acumuladas 
+  # por columna.
+  # @mat: matriz nxm
+  d <- dim(mat) 
+  m <- matrix(0, nrow=d[1], ncol=d[2])
+  for (i in 1:d[2]){
+    aux   <- mat[,i]
+    m[,i] <- cumsum(aux)
+  }
+  return(m)
+} 
 
+## i ## Forma iterativa de obtener la matriz acumulada para cada estado---------
+# Matriz de los 32 estados
+mattot <-cbind(m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,
+              m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32) 
 # Variable donde se define una sola matriz de tamaño 6x192 que contiene 
 # las 32 matrices acumuladas
 p <- rep(0,6)
@@ -129,33 +143,30 @@ for(i in 1:32){
 p <- p[,-1] # Se reacomoda la matriz
 # Proceso terminado, p contiene las matrices acumuladas
 
-## ii ## Forma iterativa de pasar entre Estados
+## ii ## Forma iterativa de pasar entre Estados --------------------------------
+R          <- 100000 # Número de simulaciones
 matacumtot <- p
-vecpostot  <- rep(0,101) # Matriz con vectores de posiciones
-vecpos     <- rep(1,101) # Vector con posiciones de cada estado (individual)
-for(i in 1:32){ # Vamos a sacar 100 iteraciones en cada Estado
-  mataces <- matacumtot[,((1+6*(i-1)):((i)*6))] # matriz acumulada del Estado
-  sa      <- runif(100)
-  for (i in (2:101)){
+alphacum   <- as.matrix(datos[1:6,]) # matriz de vectores iniciales acumulados
+alphacum   <- cmvert(alphacum) 
+vecpostot  <- rep(0,R+1) # Matriz con vectores de posiciones (nacional)
+vecpos     <- rep(1,R+1) # Vector con posiciones de cada estado (individual)
+
+for(i in 1:32){ 
+  mataces   <- matacumtot[,((1+6*(i-1)):((i)*6))] # matriz acumulada del Estado
+  sa        <- runif(R)
+  # Primer valor de vecpos
+  alpha     <- alphacum[,i]
+  p         <- as.numeric(sa[1]>alpha)
+  vecpos[1] <- sum(p)+1
+  for (i in 2:(R+1)){
     p   <- sa[i]>mataces[vecpos[i-1],]
     p   <- as.numeric(p)
-    a   <- sum(p)+1
-    pos <- a
-    vecpos[i] <- pos
+    vecpos[i] <- sum(p)+1
   }
   vecpostot <- cbind(vecpostot,vecpos)
 }
 
-# Matriz acumulada de los vectores iniciales para comenzar la simulación 
-alphacum <- as.matrix(datos[1:6,])
-cumvert  <- function(mat){
-  m <- 
-  l <- length(mat)
-  for (i in 1:l){
-    aux <- mat[,i]
-    
-  }
-} 
+
 
 
 
