@@ -171,3 +171,54 @@ colSums(datin)
 n
 
 colnames(datin)<-colnames(dat)
+
+# Forma iterativa de obtener la matriz acumulada
+mattot<-cbind(m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32)
+View(mattot)
+6*32
+length(m1[1,])
+mattot<-cbind(m1,m2)
+mattot[,2*(1:6)]
+View(m2)
+matacumtot<-acum(m1)
+View(matacumtot)
+p<-c(rep(0,6))
+length(mattot[1,(1+6):12])
+for(i in 1:32){
+  m<-mattot[,((1+6*(i-1)):((i)*6))]
+  View(m)
+  m
+  m3
+  s<-acum(m)
+  s
+  p<-cbind(p,s)
+  
+
+}
+View(p)
+p<-p[,-1]
+p
+View(p)
+ #Ya salieron las matrices acumuladas
+
+#Forma iterativa de pasar entre Estados
+matacumtot<-p
+View(matacumtot)
+vecpostot<-c(rep(0,(101))) #32 Estados 100 iteraciones cada uno
+vecpos<-c(rep(1,101))
+for(i in 1:32){ #Vamos a sacar 100 iteraciones en cada Estado
+  mataces<- matacumtot[,((1+6*(i-1)):((i)*6))]#matriz acumulada del Estado
+  sa<-runif(100)
+  for (i in (2:101)){
+    p<-sa[i]>mataces[vecpos[i-1],]
+    p<-as.numeric(p)
+    a<-sum(p)+1
+    pos<-a
+    vecpos[i]<-pos
+  }
+  vecpostot<-cbind(vecpostot,vecpos)
+}
+vecpos
+View(vecpostot)
+
+matacumtot[,13:18]

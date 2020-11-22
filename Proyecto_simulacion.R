@@ -48,3 +48,11 @@ aux <- matriz(c(S,E,A,Y,Q,R),
 Markov <- t(aux)
 rownames(Markov) <- c("S","E","A","Y","Q","R")
 colnames(Markov) <- c("S","E","A","Y","Q","R")
+
+
+
+
+
+
+
+
