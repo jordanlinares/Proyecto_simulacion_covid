@@ -8,19 +8,19 @@ M_aux <- matrix(NA,32,36)
 datos <- datos_Iniciales1[,2:33]
 
 # Modificamos el vector de Aguascalientes como prueba
-datos[4,1] <- 0.7 # S
-datos[2,1] <- 0.1 # E
-datos[1,1] <- 0.01# A
-datos[5,1] <- 0.02# Y
-datos[3,1] <- 0.15 # Q
-datos[6,1] <- 0.02 # R
+# datos[6,1] <- 0.7 # S
+# datos[5,1] <- 0.1  # E
+# datos[4,1] <- 0.1 # A
+# datos[3,1] <- 3/100 # Y
+# datos[2,1] <- 5/100  # Q
+# datos[1,1] <- 2/100  # R
   
 #Parametros fijos
 Parametros <- parametros_simulacion$Valor
 sigma   <- Parametros[1]
 phi     <- Parametros[2]
 d       <- Parametros[3]
-lambda0 <- Parametros[4]
+lambda0 <- Parametros[4] #*
 lambda1 <- Parametros[5]
 lambda2 <- Parametros[6]
 omega   <- Parametros[7]
@@ -28,7 +28,7 @@ Phi     <- Parametros[8]
 epsilon <- Parametros[9]
 gamma   <- Parametros[10]
 Gamma   <- Parametros[11]
-etta    <- Parametros[12]
+etta    <- Parametros[12] #*
 kappa   <- Parametros[13]
 delta   <- Parametros[14]
 #Poblaciones por estado
@@ -37,7 +37,7 @@ n <- c(1434635,3634868,804708,1000617,5730367,3801487,9018645,3218720,785153,
        5610153,4143593,6604451,2279637,1723259,2866142,3156674,3074745,2572287,3650602,	
        1380011,8539862,2259098,1666426)
 
-
+#* Ro también se puede modificar
 
 #Sigmas mayusculas por estado
 Sigma <- rep(NA,32)
@@ -109,7 +109,7 @@ m30 <- t(matrix(M_aux[30,],6,6))
 m31 <- t(matrix(M_aux[31,],6,6))
 m32 <- t(matrix(M_aux[32,],6,6))
 
-## Simulación -------------------------------------------------------------
+## Simulación ------------------------------------------------------------------
 # Funciones
 acum <-function (mat){
   # Función que genera la matriz de probabilidades acumuladas
@@ -152,7 +152,7 @@ p <- p[,-1] # Se reacomoda la matriz
 # Proceso terminado, p contiene las matrices acumuladas
 
 ## ii ## Forma iterativa de pasar entre Estados --------------------------------
-R          <- 100000 # Número de simulaciones
+R          <- 100 # Número de simulaciones
 matacumtot <- p
 alphacum   <- as.matrix(datos[1:6,]) # matriz de vectores iniciales acumulados
 alphacum   <- cmvert(alphacum) 
