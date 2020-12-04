@@ -1,11 +1,12 @@
 library(readxl)
 library(tidyverse)
+library(readr)
 rm(list=ls())
-datos_Iniciales1 <- read_excel("datos_Iniciales1.xlsx")
+datos_Iniciales1 <- read_excel("datos_Iniciales1 (1).xlsx")
 parametros_simulacion <- read_csv("parametros_simulacion.csv")
 
-M_aux <- matrix(NA,32,36)
-datos <- datos_Iniciales1[,2:33]
+M_aux <- matrix(NA,33,36)
+datos <- datos_Iniciales1[,2:34]
 
 #Parametros fijos
 Parametros <- parametros_simulacion$Valor
@@ -24,16 +25,13 @@ etta    <- Parametros[12]
 kappa   <- Parametros[13]
 delta   <- Parametros[14]
 #Poblaciones por estado
-n <- c(1434635,3634868,804708,1000617,5730367,3801487,9018645,3218720,785153,
-       1868996,6228175,3657048,3086414,8409693,17427790,4825401,2044058,1288571,
-       5610153,4143593,6604451,2279637,1723259,2866142,3156674,3074745,2572287,3650602,	
-       1380011,8539862,2259098,1666426)
+n <- as.numeric(datos[10,])
 
 
 
 #Sigmas mayusculas por estado
-Sigma <- rep(NA,32)
-for(i in 1:32){
+Sigma <- rep(NA,33)
+for(i in 1:33){
   Sigma[i] <- (etta*as.numeric(datos[5,i])+kappa*as.numeric(datos[6,i]) +
                  lambda0*as.numeric(datos[1,i])+lambda1*as.numeric(datos[3,i])+
                  lambda2*as.numeric(datos[4,i])+gamma*as.numeric(datos[5,i])+
@@ -43,8 +41,10 @@ for(i in 1:32){
                                       as.numeric(datos[9,i])*as.numeric(datos[4,i])/n[i]))
 }
 
+
+
 #Probabilidades de transición
-for (j in 1:32){
+for (j in 1:33){
   M_aux[j,] <- c((1-((as.numeric(datos[1,j])/Sigma[j])*(as.numeric(datos[8,j])*
                 (as.numeric(datos[3,j])/n[j])+as.numeric(datos[9,j])*
                 (as.numeric(datos[4,j])/n[j])))-(lambda0*as.numeric(datos[1,j]))/Sigma[j]),
@@ -66,6 +66,7 @@ for (j in 1:32){
                 kappa*as.numeric(datos[6,j])/Sigma[j],0,0,0,0,
                 1-as.numeric(datos[6,j])*kappa/Sigma[j])
 }
+
 
 #Matriz de Markov para cada estado
 m1 <- t(matrix(M_aux[1,],6,6))
@@ -100,6 +101,7 @@ m29 <- t(matrix(M_aux[29,],6,6))
 m30 <- t(matrix(M_aux[30,],6,6))
 m31 <- t(matrix(M_aux[31,],6,6))
 m32 <- t(matrix(M_aux[32,],6,6))
+m33 <- t(matrix(M_aux[33,],6,6))
 
 View(m2)
 ?cumsum
