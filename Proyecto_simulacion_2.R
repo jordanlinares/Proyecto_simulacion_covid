@@ -1,6 +1,10 @@
+rm(list=ls())
+
+# Importamos librerías
 library(readxl)
 library(tidyverse)
-rm(list=ls())
+
+# Importamos bases de datos
 datos_Iniciales1      <- read_excel("datos_Iniciales1.xlsx")
 parametros_simulacion <- read_csv("parametros_simulacion.csv")
 
@@ -150,22 +154,20 @@ p <- p[,-1] # Se reacomoda la matriz
 # Proceso terminado, p contiene las matrices acumuladas
 
 ## ii ## Forma iterativa de pasar entre Estados --------------------------------
-R          <- 1000 # Número de simulaciones
-N          <- 90 # Número de días
+N          <- 90  # Número de días
+R          <- 100 # Número de simulaciones
+matacumtot <- p
 alphacum   <- as.matrix(datos[1:6,]) # matriz de vectores iniciales acumulados
 alphacum   <- cmvert(alphacum) 
-vecpostot  <- rep(0,N+1) # Matriz con vectores de posiciones (nacional)
-vecpos     <- rep(1,N+1) # Vector con posiciones de cada estado (individual)
-mataces    <- p[,((1+6*(i-1)):((i)*6))] # matriz acumulada del Estado
-m.prom     <- matrix(NA, nrow = R, ncol = 33)
-
-# Proceso iterativo para obtener el promedio de cuántas 
-# iteraciones toma en llegar al estado 6
+m.prom     <- matrix(NA, nrow=R, ncol=33)
 
 for (k in 1:R){
+  vecpostot  <- rep(0,N+1) # Matriz con vectores de posiciones (nacional)
+  vecpos     <- rep(1,N+1) # Vector con posiciones de cada estado (individual)
   
-  # Llenado de la matriz de posiciones nacional
-  for (i in 1:33){ 
+  # Simulación de saltos para las 32 entidades federativas y el nacional
+  for(i in 1:33){ 
+    mataces   <- matacumtot[,((1+6*(i-1)):((i)*6))] # matriz acumulada del Estado
     sa        <- runif(N)
     # Primer valor de vecpos
     alpha     <- alphacum[,i]
@@ -179,40 +181,20 @@ for (k in 1:R){
     vecpostot <- cbind(vecpostot,vecpos)
   }
   
-  # Promedios al estado 6
+  # Número de iteraciones en llegar al estado 6
+  iter <- rep(0,33)
   for (j in 2:34){
     l <- 1
     while(vecpostot[l,j] != 6){
       l = l+1;
     }
-    m.prom[j-1] = l
+    iter[j-1] = l
   }
   
+  m.prom[k,] <- iter
 }
 
+# Promedio después de R iteraciones
+colMeans(m.prom)
 
-# Código Original
-# for (i in 1:33){ 
-#   mataces   <- matacumtot[,((1+6*(i-1)):((i)*6))] # matriz acumulada del Estado
-#   sa        <- runif(N)
-#   # Primer valor de vecpos
-#   alpha     <- alphacum[,i]
-#   p         <- as.numeric(sa[1]>alpha)
-#   vecpos[1] <- sum(p)+1
-#   for (i in 2:(N+1)){
-#     p   <- sa[i]>mataces[vecpos[i-1],]
-#     p   <- as.numeric(p)
-#     vecpos[i] <- sum(p)+1
-#   }
-#   vecpostot <- cbind(vecpostot,vecpos)
-# }
-# 
-# m.prom <- matrix(NA, nrow = R, ncol = 33)
-# prom <- rep(0,33) 
-# for (i in 2:34){
-#   k <- 1
-#   while(vecpostot[k,i] != 6){
-#     k = k+1;
-#   }
-#   prom[i-1] = k
-# }
+
