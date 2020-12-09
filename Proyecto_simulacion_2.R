@@ -150,35 +150,69 @@ p <- p[,-1] # Se reacomoda la matriz
 # Proceso terminado, p contiene las matrices acumuladas
 
 ## ii ## Forma iterativa de pasar entre Estados --------------------------------
-R          <- 90 # Número de simulaciones
-matacumtot <- p
+R          <- 1000 # Número de simulaciones
+N          <- 90 # Número de días
 alphacum   <- as.matrix(datos[1:6,]) # matriz de vectores iniciales acumulados
 alphacum   <- cmvert(alphacum) 
-vecpostot  <- rep(0,R+1) # Matriz con vectores de posiciones (nacional)
-vecpos     <- rep(1,R+1) # Vector con posiciones de cada estado (individual)
+vecpostot  <- rep(0,N+1) # Matriz con vectores de posiciones (nacional)
+vecpos     <- rep(1,N+1) # Vector con posiciones de cada estado (individual)
+mataces    <- p[,((1+6*(i-1)):((i)*6))] # matriz acumulada del Estado
+m.prom     <- matrix(NA, nrow = R, ncol = 33)
 
-for(i in 1:33){ 
-  mataces   <- matacumtot[,((1+6*(i-1)):((i)*6))] # matriz acumulada del Estado
-  sa        <- runif(R)
-  # Primer valor de vecpos
-  alpha     <- alphacum[,i]
-  p         <- as.numeric(sa[1]>alpha)
-  vecpos[1] <- sum(p)+1
-  for (i in 2:(R+1)){
-    p   <- sa[i]>mataces[vecpos[i-1],]
-    p   <- as.numeric(p)
-    vecpos[i] <- sum(p)+1
+# Proceso iterativo para obtener el promedio de cuántas 
+# iteraciones toma en llegar al estado 6
+
+for (k in 1:R){
+  
+  # Llenado de la matriz de posiciones nacional
+  for (i in 1:33){ 
+    sa        <- runif(N)
+    # Primer valor de vecpos
+    alpha     <- alphacum[,i]
+    q         <- as.numeric(sa[1]>alpha)
+    vecpos[1] <- sum(q)+1
+    for (i in 2:(N+1)){
+      q   <- sa[i]>mataces[vecpos[i-1],]
+      q   <- as.numeric(q)
+      vecpos[i] <- sum(q)+1
+    }
+    vecpostot <- cbind(vecpostot,vecpos)
   }
-  vecpostot <- cbind(vecpostot,vecpos)
-}
-prom <- c(rep(0,33))
-for (i in 2:34){
-  k <- 1
-  while(vecpostot[k,i] != 6){
-    k = k+1;
+  
+  # Promedios al estado 6
+  for (j in 2:34){
+    l <- 1
+    while(vecpostot[l,j] != 6){
+      l = l+1;
+    }
+    m.prom[j-1] = l
   }
-  prom[i-1] = k
-    
+  
 }
-p <- sum(prom)/33
-p
+
+
+# Código Original
+# for (i in 1:33){ 
+#   mataces   <- matacumtot[,((1+6*(i-1)):((i)*6))] # matriz acumulada del Estado
+#   sa        <- runif(N)
+#   # Primer valor de vecpos
+#   alpha     <- alphacum[,i]
+#   p         <- as.numeric(sa[1]>alpha)
+#   vecpos[1] <- sum(p)+1
+#   for (i in 2:(N+1)){
+#     p   <- sa[i]>mataces[vecpos[i-1],]
+#     p   <- as.numeric(p)
+#     vecpos[i] <- sum(p)+1
+#   }
+#   vecpostot <- cbind(vecpostot,vecpos)
+# }
+# 
+# m.prom <- matrix(NA, nrow = R, ncol = 33)
+# prom <- rep(0,33) 
+# for (i in 2:34){
+#   k <- 1
+#   while(vecpostot[k,i] != 6){
+#     k = k+1;
+#   }
+#   prom[i-1] = k
+# }
