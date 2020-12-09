@@ -171,5 +171,14 @@ for(i in 1:33){
   }
   vecpostot <- cbind(vecpostot,vecpos)
 }
-
-
+prom <- c(rep(0,33))
+for (i in 2:34){
+  k <- 1
+  while(vecpostot[k,i] != 6){
+    k = k+1;
+  }
+  prom[i-1] = k
+    
+}
+p <- sum(prom)/33
+p
