@@ -2,7 +2,8 @@ rm(list=ls())
 
 # Importamos librerías
 library(readxl)
-library(tidyverse)
+library(dplyr)
+library(readr)
 
 # Importamos bases de datos
 datos_Iniciales1      <- read_excel("datos_Iniciales1.xlsx")
@@ -196,5 +197,7 @@ for (k in 1:R){
 
 # Promedio después de R iteraciones
 colMeans(m.prom)
+
+## iii ## Análisis de escenarios para el caso nacional----------------------
 
 
