@@ -4,6 +4,9 @@ rm(list=ls())
 library(readxl)
 library(dplyr)
 library(readr)
+library(Biodem)
+library(reshape2)
+library(ggplot2)
 
 # Importamos bases de datos
 datos_Iniciales1      <- read_excel("datos_Iniciales1.xlsx")
@@ -113,91 +116,26 @@ m32 <- t(matrix(M_aux[32,],6,6))
 m33 <- t(matrix(M_aux[33,],6,6))
 
 ## Simulación ------------------------------------------------------------------
-# Funciones
-acum <-function (mat){
-  # Función que genera la matriz de probabilidades acumuladas
-  # @mat: matriz de nxn Markoviana
-  aux <-matrix(0, nrow=6, ncol=6)
-  for(i in 1:6){
-    aux[i,] <- cumsum(mat[i,])
-  }
-  return(aux)
+alpha  <- unlist(datos[1:6,33] * as.numeric(datos[10,33]))
+R      <- 90
+seayqr <- data.frame( "timestep" = numeric(),
+                      "S" = numeric(), "E" = numeric(),
+                      "A" = numeric(), "Y" = numeric(),
+                      "Q" = numeric(), "R" = numeric(), stringsAsFactors=FALSE)
+for (i in 1:R){
+  nrow <- c(i, mtx.exp(m33,i) %*% alpha)
+  seayqr[i,] <- nrow
 }
 
-cmvert  <- function(mat){
-  # Función que genera una matriz de sumas acumuladas 
-  # por columna.
-  # @mat: matriz nxm
-  d <- dim(mat) 
-  m <- matrix(0, nrow=d[1], ncol=d[2])
-  for (i in 1:d[2]){
-    aux   <- mat[,i]
-    m[,i] <- cumsum(aux)
-  }
-  return(m)
-} 
 
-## i ## Forma iterativa de obtener la matriz acumulada para cada estado---------
-# Matriz de los 32 estados
-mattot <-cbind(m1,m2,m3,m4,m5,m6,m7,m8,m9,m10,m11,m12,m13,m14,m15,m16,m17,m18,
-              m19,m20,m21,m22,m23,m24,m25,m26,m27,m28,m29,m30,m31,m32,m33) 
-# Variable donde se define una sola matriz de tamaño 6x192 que contiene 
-# las 32 matrices acumuladas
-p <- rep(0,6)
-
-# Proceso iterativo 
-for(i in 1:33){
-  m <- mattot[,((1+6*(i-1)):((i)*6))]
-  s <- acum(m)
-  p <- cbind(p,s)
-}
-p <- p[,-1] # Se reacomoda la matriz
-# Proceso terminado, p contiene las matrices acumuladas
-
-## ii ## Forma iterativa de pasar entre Estados --------------------------------
-N          <- 90  # Número de días
-R          <- 100 # Número de simulaciones
-matacumtot <- p
-alphacum   <- as.matrix(datos[1:6,]) # matriz de vectores iniciales acumulados
-alphacum   <- cmvert(alphacum) 
-m.prom     <- matrix(NA, nrow=R, ncol=33)
-
-for (k in 1:R){
-  vecpostot  <- rep(0,N+1) # Matriz con vectores de posiciones (nacional)
-  vecpos     <- rep(1,N+1) # Vector con posiciones de cada estado (individual)
-  
-  # Simulación de saltos para las 32 entidades federativas y el nacional
-  for(i in 1:33){ 
-    mataces   <- matacumtot[,((1+6*(i-1)):((i)*6))] # matriz acumulada del Estado
-    sa        <- runif(N)
-    # Primer valor de vecpos
-    alpha     <- alphacum[,i]
-    q         <- as.numeric(sa[1]>alpha)
-    vecpos[1] <- sum(q)+1
-    for (i in 2:(N+1)){
-      q   <- sa[i]>mataces[vecpos[i-1],]
-      q   <- as.numeric(q)
-      vecpos[i] <- sum(q)+1
-    }
-    vecpostot <- cbind(vecpostot,vecpos)
-  }
-  
-  # Número de iteraciones en llegar al estado 6
-  iter <- rep(0,33)
-  for (j in 2:34){
-    l <- 1
-    while(vecpostot[l,j] != 6){
-      l = l+1;
-    }
-    iter[j-1] = l
-  }
-  
-  m.prom[k,] <- iter
-}
-
-# Promedio después de R iteraciones
-colMeans(m.prom)
-
-## iii ## Análisis de escenarios para el caso nacional----------------------
-
-
+# Visualización 
+seayqr <- melt(seayqr, id.vars = c("timestep"))
+ggplot(seayqr, aes(x = timestep, y = value, group = variable)) + 
+  geom_line(aes(color = variable), size = 1) +
+  labs(title = "Modelo SEAYQR nacional", subtitle = "Simulación a 90 días",
+       colour = "Variable",
+       x = "Tiempo (días)",
+       y = "Población") +
+  theme_bw() +
+  theme(plot.title = element_text(face = "bold",hjust = 0.5),
+        plot.subtitle = element_text(hjust = 0.5))
