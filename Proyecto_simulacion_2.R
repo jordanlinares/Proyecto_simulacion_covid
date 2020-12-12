@@ -1,4 +1,5 @@
 rm(list=ls())
+set.seed(1998)
 
 # Importamos librerías
 library(readxl)
@@ -117,7 +118,7 @@ m33 <- t(matrix(M_aux[33,],6,6))
 
 ## Simulación ------------------------------------------------------------------
 alpha  <- unlist(datos[1:6,33] * as.numeric(datos[10,33]))
-R      <- 90
+R      <- 90 # Días
 seayqr <- data.frame( "timestep" = numeric(),
                       "S" = numeric(), "E" = numeric(),
                       "A" = numeric(), "Y" = numeric(),
