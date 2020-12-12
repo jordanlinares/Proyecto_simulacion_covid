@@ -5,7 +5,9 @@ set.seed(1998)
 library(readxl)
 library(dplyr)
 library(readr)
+install.packages("Biodem")
 library(Biodem)
+install.packages("reshape2")
 library(reshape2)
 library(ggplot2)
 
@@ -117,7 +119,37 @@ m32 <- t(matrix(M_aux[32,],6,6))
 m33 <- t(matrix(M_aux[33,],6,6))
 
 ## Simulación ------------------------------------------------------------------
+
+mattot2<-c(rep(1,90))
+datos[10,33]
+View(datos)
+datos[10,j]
+for (j in 1:33){
+  alpha  <- unlist(datos[1:6,j] * as.numeric(datos[10,j]))
+  alpha
+  R<-90 #Días
+  seayqr <- data.frame( "timestep" = numeric(),
+                        "S" = numeric(), "E" = numeric(),
+                        "A" = numeric(), "Y" = numeric(),
+                        "Q" = numeric(), "R" = numeric(), stringsAsFactors=FALSE)
+  seayqr
+  for (i in 1:R){
+    nrow <- c(i, mtx.exp(m33,i) %*% alpha)
+    nrow
+    seayqr[i,] <- nrow
+  }
+  seayqr<-as.matrix(seayqr)
+  seayqr
+  mattot2<-cbind(mattot2,seayqr)
+  
+  
+}
+
+mattot2<-mattot2[,-1]
+View(mattot2)
+datos
 alpha  <- unlist(datos[1:6,33] * as.numeric(datos[10,33]))
+alpha
 R      <- 90 # Días
 seayqr <- data.frame( "timestep" = numeric(),
                       "S" = numeric(), "E" = numeric(),
