@@ -5,9 +5,7 @@ set.seed(1998)
 library(readxl)
 library(dplyr)
 library(readr)
-install.packages("Biodem")
 library(Biodem)
-install.packages("reshape2")
 library(reshape2)
 library(ggplot2)
 
@@ -142,12 +140,9 @@ for (j in 1:33){
   seayqr
   mattot2<-cbind(mattot2,seayqr)
   
-  
 }
 
 mattot2<-mattot2[,-1]
-View(mattot2)
-datos
 alpha  <- unlist(datos[1:6,33] * as.numeric(datos[10,33]))
 alpha
 R      <- 90 # Días
@@ -161,8 +156,7 @@ for (i in 1:R){
 }
 
 # Exportamos las bases de datos para el equipo de visualización
-write_csv(seayqr, "seayqr_nacional.csv")
-
+write_csv(data.frame(mattot2), "seayqr_federal.csv")
 
 # Visualización 
 seayqr <- melt(seayqr, id.vars = c("timestep"))
