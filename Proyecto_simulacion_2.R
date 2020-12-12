@@ -160,6 +160,9 @@ for (i in 1:R){
   seayqr[i,] <- nrow
 }
 
+# Exportamos las bases de datos para el equipo de visualización
+write_csv(seayqr, "seayqr_nacional.csv")
+
 
 # Visualización 
 seayqr <- melt(seayqr, id.vars = c("timestep"))
